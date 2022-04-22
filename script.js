@@ -2,7 +2,9 @@ let data;
 let table = [];
 let cTable= [];
 let years = [];
-let temps =[]
+let temps =[];
+const canvas = document.getElementById('myChart');
+const ctx = canvas.getContext('2d');
 //https://data.giss.nasa.gov/gistemp/
 
 // uses async and await and fetch in an async function
@@ -21,12 +23,14 @@ async function chartIt(){
       };
 
     const config = {
-        type: 'bar',  // 'line',
+        type: 'line',  // 'line',
         data: data,
-        options: {}
+        options: {
+             
+        }
       };
     const myChart = new Chart(
-        document.getElementById('myChart'),
+        ctx,
         config
       );
     
@@ -56,7 +60,7 @@ function cleanData(){
     for(let i = 0; i<table.length-1;i++){  // -1 because of the extra row left over from the last \n line break
         cTable[i] = table[i].split(',');
         years[i] = parseFloat(cTable[i][0]);
-        temps[i] = parseFloat(cTable[i][1]);
+        temps[i] = parseFloat(cTable[i][1])+14;  // global average temp
         
     }
     console.log(cTable);
