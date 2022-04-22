@@ -1,13 +1,46 @@
 let data;
 let table = [];
 let cTable= [];
+let years = [];
+let temps =[]
 //https://data.giss.nasa.gov/gistemp/
 
 // uses async and await and fetch in an async function
 
+async function chartIt(){
+    await getData(); 
+    const labels =  years;
+    const data = {
+        labels: labels,
+        datasets: [{
+          label: 'Global Annual Temperature',
+          backgroundColor: 'rgb(255, 99, 132)',
+          borderColor: 'rgb(255, 99, 132)',
+          data: temps,
+        }]
+      };
+
+    const config = {
+        type: 'bar',  // 'line',
+        data: data,
+        options: {}
+      };
+    const myChart = new Chart(
+        document.getElementById('myChart'),
+        config
+      );
+    
+
+    
+
+
+}
+
+
+
 async function getData(){
 
-    const response = await fetch('test.csv');
+    const response = await fetch('ZonAnn.csv');
     data = await response.text();
     console.log(data)
     // loading this as .text()
@@ -15,15 +48,15 @@ async function getData(){
     // and cols in each row separated by ","
     // you could use a library like p5 loadTable() and avoid this
     cleanData()
-
-
 }
 
 function cleanData(){
     table = data.split('\n').slice(1);
     console.log(table)
     for(let i = 0; i<table.length-1;i++){  // -1 because of the extra row left over from the last \n line break
-        cTable[i] = table[i].split(',')
+        cTable[i] = table[i].split(',');
+        years[i] = parseFloat(cTable[i][0]);
+        temps[i] = parseFloat(cTable[i][1]);
         
     }
     console.log(cTable);
@@ -32,6 +65,7 @@ function cleanData(){
   
 
 getData();
+chartIt();
  
 
 
